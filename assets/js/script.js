@@ -33,9 +33,23 @@ function displayStatus(data) {
 
 document.getElementById('submit').addEventListener('click', e => postForm(e));
 
-async function postForm(e) {
-    const form = new FormData(document.getElementById('checksform'));
+function processOptions(form) {
 
+    let optArray = [];
+    for (let entry of form.entries()) {
+        if (entry[0] === 'options') {
+            optArray.push(entry[1]);
+        }
+    }
+    form.delete('options');
+    form.append('options', optArray.join());
+    return form;
+}
+
+async function postForm(e) {
+    const form = processOptions(new FormData(document.getElementById('checksform')));
+
+    // loop to test the outputs, send them to the console:
     // for (let entry of form.entries()) {
     //     console.log(entry);
     // }
